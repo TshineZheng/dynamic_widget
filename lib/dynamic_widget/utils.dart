@@ -1193,3 +1193,63 @@ Radius parseRadius(String radius) {
     return Radius.zero;
   }
 }
+
+Decoration? parseBoxDecoration(Map? value) {
+  if (value == null) return null;
+
+  final type = value['type'];
+  if (type == 'BoxDecoration') {
+    return BoxDecoration(
+      color: parseHexColor(value['color']),
+      borderRadius: parseBorderRadiusGeometry(value['borderRadius']),
+    );
+  }
+
+  return null;
+}
+
+Map? exportBoxDecoration(Decoration? value) {
+  if (value == null) return null;
+
+  if (value is BoxDecoration) {
+    return {
+      'type': 'BoxDecoration',
+      'color': value.color != null ? value.color!.value.toRadixString(16) : null,
+      'borderRadius': exportBorderRadiusGeometry(value.borderRadius)
+    };
+  }
+
+  debugPrint('${value.runtimeType.toString()} not support');
+
+  return null;
+}
+
+BorderRadiusGeometry? parseBorderRadiusGeometry(Map? map) {
+  if (map == null) return null;
+
+  final type = map['type'];
+
+  if (type == 'BorderRadius') {
+    return parseBorderRadius(map['value']);
+  }
+
+  debugPrint('$type not support');
+
+  return null;
+}
+
+Map? exportBorderRadiusGeometry(BorderRadiusGeometry? value) {
+  if (value == null) return null;
+
+  if (value is BorderRadius) {
+    return {
+      'type': 'BorderRadius',
+      'value': exportBorderRadius(value),
+    };
+  }
+
+  debugPrint('${value.runtimeType.toString()} not support');
+
+  return null;
+}
+
