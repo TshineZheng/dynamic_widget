@@ -10,7 +10,6 @@ class ContainerWidgetParser extends WidgetParser {
     Color? color = parseHexColor(map['color']);
     BoxConstraints constraints = parseBoxConstraints(map['constraints']);
     //TODO: decoration, foregroundDecoration and transform properties to be implemented.
-    final decoration = parseBoxDecoration(map['decoration']);
     EdgeInsetsGeometry? margin = parseEdgeInsetsGeometry(map['margin']);
     EdgeInsetsGeometry? padding = parseEdgeInsetsGeometry(map['padding']);
     Map<String, dynamic>? childMap = map['child'];
@@ -20,6 +19,9 @@ class ContainerWidgetParser extends WidgetParser {
 
     String? clickEvent =
         map.containsKey("click_event") ? map['click_event'] : null;
+
+    final decoration = parseBoxDecoration(map['decoration']);
+    final clipBehavior = parseClip(map['clipBehavior']);
 
     var containerWidget = Container(
       alignment: alignment,
@@ -31,6 +33,7 @@ class ContainerWidgetParser extends WidgetParser {
       constraints: constraints,
       decoration: decoration,
       child: child,
+      clipBehavior: clipBehavior ?? Clip.none,
     );
 
     if (listener != null && clickEvent != null) {
@@ -72,6 +75,7 @@ class ContainerWidgetParser extends WidgetParser {
           constraints != null ? exportConstraints(constraints) : null,
       "child": DynamicWidgetBuilder.export(realWidget.child, buildContext),
       "decoration": exportBoxDecoration(realWidget.decoration),
+      "clipBehavior": exportClip(realWidget.clipBehavior),
     };
   }
 
